@@ -1,6 +1,3 @@
-Below is the complete `README.md` in Markdown format. You can copy and paste this into your repository’s README file.
-
-```markdown
 # Automatic Video Summarization using CLIP and Motion Detection
 
 ## Overview
