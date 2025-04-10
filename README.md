@@ -1,3 +1,4 @@
+```markdown
 # Automatic Video Summarization using CLIP and Motion Detection
 
 ## Overview
@@ -20,12 +21,12 @@ This repository provides a pipeline for automatic video summarization that extra
 
 2. **Dual Filtering:**  
    For each frame, the system computes:
-   - The **motion magnitude** \(M_t\) by comparing consecutive frames.
+   - The **motion magnitude** `M_t` by comparing consecutive frames.
    - The **cosine similarity** between the frame and the provided text prompt using CLIP (if enabled).  
    A frame is selected as a candidate if it exceeds both the motion threshold and, when applicable, the CLIP similarity threshold.
 
 3. **Segment Extraction and Merging:**  
-   Selected frames are expanded into segments of a specified duration (\(\Delta t\)). If segments are close in time, they are merged to maintain temporal continuity.
+   Selected frames are expanded into segments of a specified duration (`Δt`). If segments are close in time, they are merged to maintain temporal continuity.
 
 4. **Final Assembly:**  
    The selected segments are concatenated using MoviePy to produce the final video summary, with an optional limit on total duration.
@@ -62,6 +63,7 @@ Alternatively, if you are using Google Colab, run the following in a cell:
    from google.colab import drive
    drive.mount('/content/drive')
    ```
+
 2. **Configure Folders:**  
    Set the input folder (where your videos are located) and the output folder (where the summarized video will be saved) in the configuration parameters of the code.
 
@@ -70,10 +72,10 @@ Alternatively, if you are using Google Colab, run the following in a cell:
 1. **Configure Parameters:**  
    Edit the configuration parameters in the provided Python script or Colab notebook:
    - **Text Prompt:** Specify a prompt (e.g., "while cooking") or leave it blank to use only motion detection.
-   - **Thresholds:** Adjust the motion threshold (\(\tau_{\text{motion}}\)) and CLIP similarity threshold (\(\tau_{\text{clip}}\)).
+   - **Thresholds:** Adjust the motion threshold (`τ_motion`) and CLIP similarity threshold (`τ_clip`).
    - **Clip Duration and Merging Gap:** Set the duration for each extracted segment and the merging gap.
    - **Output Format:** Choose whether to force the final output into a vertical (9:16) format.
-   
+
 2. **Run the Pipeline:**  
    Execute the script or notebook. The system will process each video file, extract candidate segments, merge them as needed, and generate the final video summary.
 
@@ -84,23 +86,29 @@ Alternatively, if you are using Google Colab, run the following in a cell:
 
 ### CLIP and Contrastive Learning
 
-CLIP (Contrastive Language–Image Pretraining) maps images and text into a shared embedding space using a dual encoder architecture. For a given image \( x \) and text prompt \( y \), the cosine similarity is computed as:
-\[
-\text{sim}(x, y) = \frac{f(x) \cdot g(y)}{\|f(x)\| \, \|g(y)\|}
-\]
+CLIP (Contrastive Language–Image Pretraining) maps images and text into a shared embedding space using a dual encoder architecture. For a given image `x` and text prompt `y`, the cosine similarity is computed as:
+
+```
+sim(x, y) = (f(x) · g(y)) / (||f(x)|| * ||g(y)||)
+```
+
 This similarity measure is key for determining the semantic relevance of a frame to the provided text prompt.
 
 ### Motion Detection
 
-Motion detection is performed by comparing consecutive frames. Let \( F_t \) and \( F_{t-1} \) be the grayscale frames at times \( t \) and \( t-1 \), respectively. The difference is computed as:
-\[
-D_t(i,j) = \left| F_t(i,j) - F_{t-1}(i,j) \right|
-\]
-The motion magnitude \( M_t \) is calculated by:
-\[
-M_t = \sum_{i,j} \mathbb{1}\{ D_t(i,j) > \delta \}
-\]
-A frame is considered dynamic if \( M_t > \tau_{\text{motion}} \).
+Motion detection is performed by comparing consecutive frames. Let `F_t` and `F_{t-1}` be the grayscale frames at times `t` and `t-1`, respectively. The difference is computed as:
+
+```
+D_t(i,j) = | F_t(i,j) - F_{t-1}(i,j) |
+```
+
+The motion magnitude `M_t` is calculated by:
+
+```
+M_t = Σ_{i,j} 1{ D_t(i,j) > δ }
+```
+
+A frame is considered dynamic if `M_t > τ_motion`.
 
 ## CLIP Architecture
 
@@ -138,5 +146,3 @@ Contributions are welcome! Please fork the repository and submit pull requests w
 
 For any questions or feedback, please contact [luigi@luxdada.it](mailto:luigi@luxdada.it).
 ```
-
-Feel free to adjust the file paths, contact details, and any parameters to fit your project specifics.
