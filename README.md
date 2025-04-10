@@ -1,4 +1,3 @@
-```markdown
 # Automatic Video Summarization using CLIP and Motion Detection
 
 ## Overview
