@@ -1,0 +1,4 @@
+# Ignore large notebook
+Automatic_Video_Montage_Guided_by_Textual_Prompts.ipynb
+# macOS
+.DS_Store
