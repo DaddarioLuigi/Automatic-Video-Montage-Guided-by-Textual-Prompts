@@ -1,96 +1,126 @@
 # Automatic Video Montage Guided by Textual Prompts
 
-This project implements an **automatic video montage tool** that selects and edits video clips based on **textual prompts**.  
-It analyzes video content (optionally also audio), matches it with the given prompt, and intelligently constructs a final montage, enhancing creativity and saving editing time.
+This project implements an automatic video montage system that selects and merges the most relevant scenes from a video based on user-provided natural language prompts. The pipeline combines motion detection, image captioning, and semantic similarity matching using CLIP to identify and assemble video segments that match textual descriptions.
 
 ## Features
 
-- **Text-to-video matching**: Selects clips based on how well they match a textual prompt.
-- **Speech analysis** (optional): Considers spoken words in videos when matching.
-- **Automatic montage creation**: Generates a final video sequence based on relevance scores.
-- **Customizable parameters**: Adjust number of clips, clip length, and scoring thresholds.
-- **Lightweight and easy to extend**.
+- **Motion Detection**: Automatically identifies dynamic segments in videos using frame difference analysis
+- **Image Captioning**: Generates detailed captions for video frames using BLIP (Bootstrapping Language-Image Pre-training)
+- **Semantic Similarity Matching**: Uses CLIP (Contrastive Language-Image Pre-training) to match user prompts with video content
+- **Automatic Montage Generation**: Assembles selected video segments into a cohesive final montage
+
+## How It Works
+
+The pipeline consists of four main stages:
+
+1. **Motion Detection**: Analyzes the video to detect segments with significant motion using pixel-level frame differences. A statistical threshold (75th percentile) is automatically computed to identify dynamic portions of the video.
+
+2. **Frame Extraction**: Extracts center frames from each detected motion segment to serve as representative images for content analysis.
+
+3. **Caption Generation**: Uses BLIP image captioning model to generate descriptive captions for each extracted frame, capturing the visual content and context.
+
+4. **Semantic Matching and Montage**: Encodes user-provided textual prompts using CLIP and computes cosine similarity with the generated captions. Segments with similarity scores above a threshold are selected and concatenated into the final montage video.
 
 ## Installation
 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/automatic-video-montage.git
-   cd automatic-video-montage
+   git clone https://github.com/your-username/video_summarization.git
+   cd video_summarization
    ```
 
 2. Install required dependencies:
 
    ```bash
-   pip install -r requirements.txt
+   pip install git+https://github.com/openai/CLIP.git
+   pip install transformers torchvision moviepy opencv-python
    ```
 
-   *(You'll need packages like `moviepy`, `transformers`, `torch`, and optionally `whisper` for speech analysis.)*
+   For memory-efficient inference with 8-bit quantization:
+
+   ```bash
+   pip install bitsandbytes
+   ```
+
+## Dependencies
+
+- Python 3.8+
+- CLIP (OpenAI's implementation)
+- transformers (for BLIP models)
+- torch and torchvision
+- moviepy
+- opencv-python
+- numpy
+- matplotlib
+- PIL (Pillow)
 
 ## Usage
 
-```bash
-python automatic_video_montage_guided_by_textual_prompts.py --input_dir <path_to_your_clips> --prompt "<your_text_prompt>" --output_path <output_video_path>
+The project is implemented as a Jupyter notebook (`Automatic_Video_Montage_Guided_by_Textual_Prompts.ipynb`). To use it:
+
+1. Open the notebook in Jupyter or Google Colab
+2. Mount your Google Drive (if using Colab) or update the video path
+3. Configure the video input path
+4. Run the motion detection cells to analyze your video
+5. Set your textual prompts describing the scenes you want to include
+6. Execute the pipeline to generate the final montage
+
+### Example Prompts
+
+```
+prompts = [
+    "adding the ingredients in the sandwich",
+    "closing the box",
+    "plating the dish"
+]
 ```
 
-### Example
+### Configuration Parameters
 
-```bash
-python automatic_video_montage_guided_by_textual_prompts.py --input_dir ./videos --prompt "sunset at the beach" --output_path ./final_montage.mp4
-```
+- `pixel_change_threshold`: Threshold for detecting pixel changes between frames (default: 25)
+- `motion_pixel_threshold`: Minimum number of changed pixels to consider a segment as containing motion (auto-calculated as 75th percentile)
+- `similarity_threshold`: Minimum CLIP similarity score for segment selection (default: 0.25)
 
-### Important arguments
+## Technical Details
 
-- `--input_dir`: Folder containing the input video clips.
-- `--prompt`: Text prompt guiding the montage (e.g., "people smiling", "city at night").
-- `--output_path`: Where the final montage will be saved.
-- `--use_audio`: (optional) If set, the model also uses the audio track to improve matching.
-- `--clip_duration`: (optional) Duration of selected clips in seconds.
-- `--number_of_clips`: (optional) How many clips to select for the final video.
+### Motion Detection Algorithm
 
-## How It Works
+The motion detection uses frame difference analysis:
+- Computes absolute difference between consecutive grayscale frames
+- Counts pixels where the difference exceeds a threshold
+- Identifies segments where motion exceeds a statistical threshold (75th percentile)
 
-1. **Clip Extraction**: Splits input videos into short clips.
-2. **Content Encoding**: Encodes video frames (and optionally audio) using pretrained models.
-3. **Prompt Encoding**: Encodes the input textual prompt.
-4. **Similarity Scoring**: Calculates similarity between prompt and clips.
-5. **Selection and Montage**: Selects top-matching clips and assembles them into a smooth video.
+### Caption Generation
+
+Uses BLIP (Salesforce/blip-image-captioning-base) for generating frame descriptions. The model can be configured with:
+- Float16 precision for memory efficiency
+- 8-bit quantization using bitsandbytes for further memory reduction
+- Custom prompts for context-aware captioning
+
+### Semantic Matching
+
+CLIP (ViT-B/32) is used to compute semantic similarity between:
+- User-provided textual prompts
+- Generated image captions
+
+Segments with cosine similarity above the threshold are selected for the final montage.
 
 ## Requirements
 
-- Python 3.8+
-- `moviepy`
-- `transformers`
-- `torch`
-- `whisper` (if using speech-to-text)
-- `scikit-learn`
-- `numpy`
-- `opencv-python`
-
-You can install them via:
-
-```bash
-pip install moviepy transformers torch scikit-learn numpy opencv-python
-```
-
-*(Optional for audio analysis)*
-
-```bash
-pip install git+https://github.com/openai/whisper.git 
-```
-
-## Notes
-
-- For better accuracy, you can fine-tune the model thresholds for your specific dataset.
-- GPU acceleration is recommended for faster video processing and prompt matching.
+- GPU acceleration is highly recommended for faster processing
+- Sufficient memory for loading CLIP and BLIP models (approximately 2-4GB VRAM)
+- Video input should be in a standard format (MP4, AVI, etc.)
 
 ## Future Improvements
 
-- Add support for smoother transitions (crossfade).
-- Implement dynamic clip selection based on prompt complexity.
-- Allow background music addition.
+- Support for temporal context in captioning (using previous frames)
+- Enhanced prompt customization options
+- Automatic threshold optimization
+- Support for multiple video inputs
+- Transition effects between segments
+- Audio track preservation in final montage
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License.
