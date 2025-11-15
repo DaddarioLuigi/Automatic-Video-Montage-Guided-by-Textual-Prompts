@@ -1,4 +1,56 @@
 # Ignore large notebook
-Automatic_Video_Montage_Guided_by_Textual_Prompts.ipynb
+# notebooks/Automatic_Video_Montage_Guided_by_Textual_Prompts.ipynb
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Output files
+outputs/*.mp4
+outputs/*.avi
+*.pkl
+captions_*.pkl
+
 # macOS
 .DS_Store
+
+# Model cache
+.cache/
+models/
+
+# Logs
+*.log

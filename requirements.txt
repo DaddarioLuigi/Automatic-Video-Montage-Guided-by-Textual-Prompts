@@ -1,0 +1,28 @@
+# Core Dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.21.0
+opencv-python>=4.8.0
+Pillow>=9.0.0
+matplotlib>=3.5.0
+
+# CLIP
+git+https://github.com/openai/CLIP.git
+
+# Transformers (for BLIP)
+transformers>=4.30.0
+accelerate>=0.20.0
+
+# Video Processing
+moviepy>=1.0.3
+
+# Utilities
+tqdm>=4.65.0
+
+# Optional: Memory-efficient inference
+# bitsandbytes>=0.39.0  # Uncomment for 8-bit quantization support
+
+# Development (optional)
+# jupyter>=1.0.0
+# ipykernel>=6.0.0
+
