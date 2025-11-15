@@ -46,7 +46,11 @@ class VideoMontagePipeline:
         self.motion_detector = MotionDetector()
         self.frame_extractor = FrameExtractor(video_path)
         self.caption_generator = CaptionGenerator(device=device)
-        self.prompt_parser = PromptParser()
+        # Use advanced parsing by default (with fallback to basic if not available)
+        self.prompt_parser = PromptParser(
+            use_advanced_parsing=True,
+            use_semantic_filtering=True
+        )
         self.clip_matcher = CLIPMatcher(device=device)
         self.analyzer = PipelineAnalyzer(self.fps)
         self.video_assembler = VideoAssembler(video_path, self.fps)
@@ -103,12 +107,27 @@ class VideoMontagePipeline:
         self.captions = self.caption_generator.generate(self.frames)
         print("\n[4/7] Prompt Parsing & Semantic Filtering...")
         parsed_prompts = self.prompt_parser.parse(prompts)
-        print(f"   Extracted {len(parsed_prompts['keywords'])} keywords")
-        print(f"   Found {len(parsed_prompts['verbs'])} action verbs")
+        keywords = self.prompt_parser.get_keywords()
+        verbs = self.prompt_parser.get_verbs()
+        print(f"   Extracted {len(keywords)} keywords")
+        print(f"   Found {len(verbs)} action verbs")
+        
+        # Show advanced parsing info if available
+        entities = self.prompt_parser.get_entities()
+        semantic_roles = self.prompt_parser.get_semantic_roles()
+        if entities:
+            print(f"   Found {len(entities)} named entities")
+        if semantic_roles:
+            print(f"   Extracted {len(semantic_roles)} semantic roles (subject-verb-object)")
         
         if enable_semantic_filtering:
-            filtered_captions = self.prompt_parser.filter_captions(self.captions)
-            print(f"   Filtered to {len(filtered_captions)} captions matching keywords")
+            # Use semantic filtering with embeddings if available
+            filtered_captions = self.prompt_parser.filter_captions(
+                self.captions,
+                semantic_threshold=0.3,
+                use_semantic=True
+            )
+            print(f"   Filtered to {len(filtered_captions)} captions using semantic similarity")
             captions_for_matching = filtered_captions
         else:
             captions_for_matching = self.captions

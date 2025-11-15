@@ -19,6 +19,11 @@ moviepy>=1.0.3
 # Utilities
 tqdm>=4.65.0
 
+# NLP Dependencies
+spacy>=3.7.0
+sentence-transformers>=2.2.0
+scikit-learn>=1.3.0
+
 # Optional: Memory-efficient inference
 # bitsandbytes>=0.39.0  # Uncomment for 8-bit quantization support
 
