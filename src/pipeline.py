@@ -162,6 +162,10 @@ class VideoMontagePipeline:
             print("   WARNING: No segments selected. Montage cannot be created.")
             return None
         
+        if output_path is None:
+            print("   Skipping video assembly (output_path is None)")
+            return None
+        
         output_path = self.video_assembler.assemble(
             self.selected_segments, output_path
         )

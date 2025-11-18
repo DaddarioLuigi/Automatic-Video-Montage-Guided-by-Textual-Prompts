@@ -1,0 +1,27 @@
+{
+  "n_segments": 43,
+  "metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "true_positives": 43,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "coverage_ratio": 0.49624866023579856,
+    "temporal_coverage": 0.12449583221296048,
+    "segment_coverage_ratio": 0.581081081081081,
+    "selected_duration": 15.448766666666668,
+    "total_motion_duration": 31.1311,
+    "total_video_duration": 124.09063333333333,
+    "vocabulary_size": 45,
+    "unique_words_ratio": 0.11873350923482849,
+    "caption_diversity": 0.7276381570567773,
+    "total_words": 379,
+    "entropy": 3.9960818658398805,
+    "avg_gap_duration": 2.586711111111111,
+    "total_gaps": 42,
+    "temporal_coherence_score": 0.12195366688825618,
+    "min_gap": 0.03336666666666667,
+    "max_gap": 14.614600000000001
+  }
+}

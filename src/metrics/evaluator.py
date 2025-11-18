@@ -122,7 +122,7 @@ def compute_diversity_metrics(captions: List[Tuple[int, str]],
             'caption_diversity': 0.0
         }
     
-        selected_captions = [cap for idx, cap in captions if idx in selected_indices]
+    selected_captions = [cap for idx, cap in captions if idx in selected_indices]
     all_words = []
     for caption in selected_captions:
         words = caption.lower().split()

@@ -10,3 +10,4 @@ from .generator import CaptionGenerator, generate_captions
 __all__ = ['CaptionGenerator', 'generate_captions']
 
 
+

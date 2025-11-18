@@ -190,9 +190,8 @@ class ExperimentRunner:
         print(f"\n[Baselines] Running baseline methods with n_segments={n_segments_proposed}...")
         baseline_runner = BaselineMethods(self.pipeline.fps)
         
-        import cv2
-        cap = cv2.VideoCapture(self.video_path)
-        motions = self.pipeline.motion_detector.analyze(cap)
+        # Get motion data - analyze expects video path, not VideoCapture object
+        motions = self.pipeline.motion_detector.analyze(self.video_path)
         
         baseline_results = baseline_runner.run_all_baselines(
             self.pipeline.motion_segments,

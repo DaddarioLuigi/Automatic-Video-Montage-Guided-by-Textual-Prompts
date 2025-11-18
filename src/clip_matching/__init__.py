@@ -10,3 +10,4 @@ from .matcher import CLIPMatcher, compute_similarities, select_segments
 __all__ = ['CLIPMatcher', 'compute_similarities', 'select_segments']
 
 
+

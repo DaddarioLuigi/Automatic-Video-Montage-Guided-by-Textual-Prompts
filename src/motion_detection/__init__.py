@@ -10,3 +10,4 @@ from .detector import MotionDetector, analyze_motion, detect_motion
 __all__ = ['MotionDetector', 'analyze_motion', 'detect_motion']
 
 
+
