@@ -15,7 +15,8 @@ def analyze_pipeline(motion_segments: List[Tuple[int, int]],
                     captions: List[Tuple[int, str]],
                     similarities: List[Tuple[int, float, str]],
                     selected_segments: List[Tuple[int, int]],
-                    fps: float) -> Dict:
+                    fps: float,
+                    similarity_threshold: float = 0.25) -> Dict:
     """
     Analyze the complete pipeline performance.
     
@@ -50,13 +51,15 @@ def analyze_pipeline(motion_segments: List[Tuple[int, int]],
         'motion_segments_count': len(motion_segments),
         'frames_extracted': len(frames),
         'captions_generated': len(captions),
+        'n_similarity_scores': len(similarities),
         'similarity_stats': {
             'mean': np.mean(scores),
             'median': np.median(scores),
             'std': np.std(scores),
             'min': np.min(scores),
             'max': np.max(scores),
-            'above_threshold': sum(1 for s in scores if s > 0.25)
+            'above_threshold': sum(1 for s in scores if s > similarity_threshold),
+            'threshold': similarity_threshold,
         },
         'caption_stats': {
             'avg_length': np.mean(caption_lengths),
@@ -125,14 +128,22 @@ def threshold_sensitivity_analysis(similarities: List[Tuple[int, float, str]],
 
 
 def plot_analysis_results(similarities: List[Tuple[int, float, str]],
-                          selected_segments: List[Tuple[int, int]], fps: float):
+                          selected_segments: List[Tuple[int, int]],
+                          fps: float,
+                          similarity_threshold: float = 0.25):
     """Create visualization plots for pipeline analysis."""
     scores = [score for _, score, _ in similarities]
     
     plt.figure(figsize=(14, 10))
     plt.subplot(2, 2, 1)
     plt.hist(scores, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
-    plt.axvline(0.25, color='red', linestyle='--', linewidth=2, label='Threshold (0.25)')
+    plt.axvline(
+        similarity_threshold,
+        color='red',
+        linestyle='--',
+        linewidth=2,
+        label=f'Threshold ({similarity_threshold:.2f})',
+    )
     plt.xlabel('CLIP Similarity Score', fontsize=11)
     plt.ylabel('Frequency', fontsize=11)
     plt.title('Distribution of Similarity Scores', fontsize=12, fontweight='bold')
@@ -141,7 +152,13 @@ def plot_analysis_results(similarities: List[Tuple[int, float, str]],
     plt.subplot(2, 2, 2)
     sorted_scores = sorted(scores, reverse=True)
     plt.plot(sorted_scores, marker='o', markersize=3, linewidth=1.5, alpha=0.7)
-    plt.axhline(0.25, color='red', linestyle='--', linewidth=2, label='Threshold (0.25)')
+    plt.axhline(
+        similarity_threshold,
+        color='red',
+        linestyle='--',
+        linewidth=2,
+        label=f'Threshold ({similarity_threshold:.2f})',
+    )
     plt.xlabel('Segment Rank', fontsize=11)
     plt.ylabel('CLIP Similarity Score', fontsize=11)
     plt.title('Similarity Scores (Sorted)', fontsize=12, fontweight='bold')
@@ -183,11 +200,12 @@ class PipelineAnalyzer:
                 frames: List[Tuple[int, any]],
                 captions: List[Tuple[int, str]],
                 similarities: List[Tuple[int, float, str]],
-                selected_segments: List[Tuple[int, int]]) -> Dict:
+                selected_segments: List[Tuple[int, int]],
+                similarity_threshold: float = 0.25) -> Dict:
         """Perform complete pipeline analysis."""
         self.analysis_results = analyze_pipeline(
             motion_segments, frames, captions, similarities,
-            selected_segments, self.fps
+            selected_segments, self.fps, similarity_threshold=similarity_threshold
         )
         return self.analysis_results
     
@@ -211,7 +229,7 @@ class PipelineAnalyzer:
         
         print(f"\n3. Semantic Filtering & Matching:")
         stats = self.analysis_results['similarity_stats']
-        print(f"   - Total similarity scores computed: {len(self.analysis_results['similarity_stats'])}")
+        print(f"   - Total similarity scores computed: {self.analysis_results.get('n_similarity_scores', 0)}")
         print(f"   - Average similarity score: {stats['mean']:.3f}")
         print(f"   - Segments passing threshold: {stats['above_threshold']}")
         

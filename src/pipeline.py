@@ -91,13 +91,19 @@ class VideoMontagePipeline:
         print("=" * 60)
         
         print("\n[1/7] Motion Detection...")
-        motions = self.motion_detector.analyze(self.video_path)
+        # Ensure CLI-provided thresholds actually affect motion detection
+        self.motion_detector.pixel_change_threshold = pixel_change_threshold
+
+        # Only show motion plots when analysis+plots are enabled (avoid intrusive popups)
+        show_motion_plots = bool(enable_analysis and enable_plots)
+
+        motions = self.motion_detector.analyze(self.video_path, show_plots=show_motion_plots)
         
         if motion_pixel_threshold is None:
             motion_pixel_threshold = self.motion_detector.suggested_threshold
         
         self.motion_segments = self.motion_detector.detect_segments(
-            self.video_path, motion_pixel_threshold
+            self.video_path, motion_pixel_threshold, show_plots=show_motion_plots
         )
         print(f"   Detected {len(self.motion_segments)} motion segments")
         print("\n[2/7] Frame Extraction...")
@@ -144,7 +150,7 @@ class VideoMontagePipeline:
             print("\n[6/7] Analysis & Experiments...")
             analysis_results = self.analyzer.analyze(
                 self.motion_segments, self.frames, self.captions,
-                self.similarities, self.selected_segments
+                self.similarities, self.selected_segments, similarity_threshold
             )
             self.analyzer.print_summary()
             
@@ -152,7 +158,7 @@ class VideoMontagePipeline:
                 from .analysis.analyzer import plot_analysis_results
                 plot_analysis_results(
                     self.similarities,
-                    self.selected_segments, self.fps
+                    self.selected_segments, self.fps, similarity_threshold
                 )
         else:
             print("\n[6/7] Analysis & Experiments... (skipped)")
