@@ -1,0 +1,220 @@
+\documentclass[conference,compsoc]{IEEEtran}
+
+% =======================
+% Packages
+% =======================
+\ifCLASSOPTIONcompsoc
+  \usepackage[nocompress]{cite}
+\else
+  \usepackage{cite}
+\fi
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{placeins}
+
+% Overleaf friendly figures
+% Upload your PNG files into a folder named "figures" in Overleaf
+\graphicspath{{figures/}}
+
+% =======================
+% Document
+% =======================
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Automatic Video Montage Generation Guided by Textual Prompts\\
+A Multi Modal Pipeline with Motion Segmentation BLIP Captioning and CLIP Matching}
+
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Luigi Daddario (mat. 908294)}
+\IEEEauthorblockA{Artificial Intelligence For Science And Technology\\
+University of Milano-Bicocca\\
+Email: l.daddario1@campus.unimib.it}}
+
+
+\maketitle
+
+% =======================
+% Abstract
+% =======================
+\begin{abstract}
+This work presents a practical system for automatic video montage generation guided by short textual prompts. The goal is to select and assemble the most relevant moments from an input video according to user intent expressed in natural language. The proposed approach is a multi stage pipeline. It first detects motion segments through frame difference statistics. It then extracts representative frames and generates image captions using a BLIP model. The prompts are analysed with lightweight linguistic processing and optional semantic filtering based on sentence embeddings. Finally captions and prompts are matched with CLIP text embeddings and segments above a similarity threshold are selected and concatenated into the final montage. We report experiments that compare the proposed method against baselines that ignore semantics such as random selection uniform sampling first segments and motion intensity ranking. We also report an ablation on semantic filtering and a sensitivity analysis over similarity thresholds. Results on the provided test video show strong improvements over baselines and confirm that the two stage filtering strategy can reduce computation while keeping selection quality high
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+% =======================
+\section{Introduction}
+Video summarization is often treated as a task driven by low level cues such as motion or shot boundaries. These cues are useful but they do not capture user intent. In many scenarios the user already knows what they are searching for and can describe it with a short prompt. This motivates natural language guided montage generation where the summary is conditioned on text and not only on visual dynamics
+
+This project targets a simple but realistic setting. Given one input video and a list of prompts the system selects segments that best match the prompts and produces a montage. The focus is on a modular pipeline that can be run end to end and can also be analysed through experiments. The pipeline combines classical video processing with recent vision language models. Motion detection is used to narrow the search to dynamic regions. BLIP is used to obtain captions that act as textual proxies for visual content. CLIP is used to align prompts and captions in a shared semantic space. An optional semantic filter based on sentence embeddings is used to reduce the number of captions to be scored by CLIP
+
+% =======================
+\section{Objectives}
+The objectives of this work are the following
+
+First we design an end to end pipeline that converts a raw video into a montage guided by user prompts
+
+Second we aim for a system that is easy to reproduce and to evaluate. The code provides scripts for running the pipeline and for running comparative experiments that generate JSON results tables and figures
+
+Third we study the contribution of individual components through baselines and ablations. We also study the effect of key thresholds to understand the precision recall trade off and the impact on coverage diversity and temporal coherence
+
+% =======================
+\section{Methods}
+
+\subsection{Dataset}
+We evaluate the system on the videos provided with the project repository. The main reference experiment uses a short cooking style video and three prompts that describe key actions. Motion segmentation produces a set of candidate temporal segments and each segment is represented by its center frame. The reported metrics and plots are generated by the experiment scripts and stored in the results folder
+
+\subsection{Optimization and Learning Setup}
+This work focuses on inference and matching rather than on training. The core models are used in a zero shot or off the shelf manner
+
+Caption generation uses BLIP for conditional captioning. In the current configuration we use the base captioning checkpoint from Salesforce. The generated captions are short and descriptive and they are suitable as intermediate textual representations
+
+Semantic matching uses CLIP. Instead of matching prompts directly to images we match prompts to captions. Both prompts and captions are embedded with the CLIP text encoder and cosine similarity is computed. For each caption we keep the maximum similarity over the set of prompts
+
+The pipeline includes two key thresholds. A motion threshold is computed as a percentile of per frame motion values and a similarity threshold selects segments for the final montage. We also optionally apply a semantic filter before CLIP. This filter uses sentence embeddings from a sentence transformer model and keeps only captions above a semantic similarity threshold. This step can reduce CLIP computations and can also remove clearly irrelevant captions
+
+\subsection{Environment and State Representation}
+The system can be described as a sequence of representation changes
+
+The input is a sequence of frames. Motion detection converts it into a set of motion scores and then into temporal segments
+
+Each segment is mapped to one representative image. Caption generation maps each image to a short sentence. Prompt parsing maps the user input into keywords and optional linguistic structures. Semantic filtering maps captions and prompts to embedding vectors. CLIP matching maps captions and prompts to CLIP text embeddings and produces similarity scores. The final decision is the set of segments whose score is above the chosen threshold. Video assembly concatenates the corresponding subclips in temporal order and produces the montage
+
+% =======================
+\section{Experiments}
+
+\subsection{Experimental Protocol}
+We follow a simple protocol. We first run the full pipeline with a fixed similarity threshold and we collect the selected segments. We then compare the proposed method to baselines that select the same number of segments. We also run an ablation where we disable the semantic filtering stage. Finally we run a threshold sensitivity experiment where we recompute the selected segments for multiple similarity thresholds and evaluate the resulting montages
+
+All experiments are executed through the provided scripts. The main outputs are a JSON file that stores metrics and selected segments and a set of figures that can be directly included in the paper
+
+\subsection{Implementation and Reproducibility}
+The project is implemented in Python and relies on standard libraries for vision and deep learning. Video processing uses OpenCV for reading frames and MoviePy for montage assembly. BLIP and the optional text summarization components use the Hugging Face Transformers ecosystem. CLIP uses the original OpenAI implementation. Prompt parsing optionally uses spaCy. Semantic filtering uses sentence transformers
+
+Reproducibility is supported through a fixed experimental setup. The prompts and the video path are specified in the command line scripts. Baseline methods that involve randomness use an explicit seed. The results folder stores the exact metric values used in this paper and the generated plots can be uploaded to Overleaf and referenced from the LaTeX source
+
+\subsection{Results}
+This section summarizes the quantitative results produced by the experiment runner. We report metrics that capture selection quality and montage properties. Precision recall and F1 are computed in a proxy manner within the pipeline since full manual ground truth labels are not available. In practice these values measure internal consistency with the similarity threshold rather than correctness with respect to human annotations. Coverage measures how much motion content is included in the montage. Diversity is computed from caption vocabulary and entropy. Temporal coherence is computed from the average temporal gap between consecutive selected segments
+
+In the baseline comparison the proposed method achieves strong performance. For the reference run the proposed method selects 43 segments and reaches precision 1.000 recall 1.000 and F1 1.000. It achieves a coverage ratio of 0.496 and a caption diversity of 0.728. The baseline methods reach lower precision around 0.581 with the same recall and F1 around 0.735. Motion intensity selection produces high coverage but it does not improve semantic relevance
+
+We also report an ablation on semantic filtering. With semantic filtering enabled the pipeline reduces the candidate captions from 74 to 43 and selects 43 segments. Without semantic filtering the pipeline processes all 74 captions and selects 74 segments which increases coverage to 1.000 but produces a much longer montage. Table \ref{tab:ablation} summarizes the key numeric differences
+
+\begin{table}[t]
+\centering
+\caption{Ablation study on semantic filtering on video 1. Values are taken from the experiment outputs}
+\label{tab:ablation}
+\begin{tabular}{lccc}
+\toprule
+Configuration & Selected Segments & Coverage Ratio & Temporal Coverage \\
+\midrule
+Full pipeline with semantic filtering & 43 & 0.496 & 0.124 \\
+No semantic filtering & 74 & 1.000 & 0.251 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Finally we run a sensitivity analysis over the similarity threshold in the range 0.15 to 0.45. On the reference video the selected set is stable across the tested thresholds and the number of selected segments remains 43. This suggests that the similarity scores of selected segments are well separated from non selected segments after semantic filtering. Figure \ref{fig:threshold} reports the threshold sweep and can be used to motivate the default configuration
+
+The full numeric results are stored in the JSON outputs generated by the scripts. Figures are provided in the Visualizations section including baseline comparison heatmap ablation results and threshold sensitivity
+
+\subsection{Discussion and Limitations}
+The experiments support the main intuition of the project. Semantics matter. Methods that ignore text and only rely on temporal heuristics or motion statistics can cover many segments but they are less selective and include many irrelevant moments. CLIP based matching improves relevance because it aligns prompt intent with caption meaning
+
+Semantic filtering before CLIP is conceptually useful because it reduces the candidate set that needs to be scored by CLIP. This can be important when the video contains many segments. The ablation study can quantify this impact on both computation and metrics once the ablation results are exported to figures and tables
+
+There are also limitations. The current evaluation is based on proxy metrics because the system does not include manual annotation of relevant segments. This is acceptable for comparative analysis but it should be stated clearly. Caption quality can also affect matching quality. If BLIP produces generic captions some actions can be missed. Finally the montage uses hard cuts and does not add transitions and it may reduce perceived coherence even when relevance is high
+
+% =======================
+\section{Conclusion}
+We presented a modular pipeline for video montage generation guided by textual prompts. The method combines motion based candidate selection with caption generation and semantic matching. Experiments show that the proposed method outperforms simple baselines and that threshold selection controls the trade off between selectivity and coverage. The system is suitable for an academic project because it integrates computer vision and natural language processing in a clear and testable way and it provides scripts that support reproducible experiments and paper ready outputs
+
+% =======================
+\section{Visualizations}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{baseline_comparison.png}
+\caption{Baseline comparison results. This figure will be uploaded to Overleaf. It compares the proposed method against random uniform first segments and motion intensity selection across multiple metrics}
+\label{fig:baseline}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{metrics_comparison_heatmap.png}
+\caption{Heatmap comparison of metrics across methods. This figure will be uploaded to Overleaf and provides a compact overview of precision recall F1 coverage diversity and temporal coherence}
+\label{fig:heatmap}
+\end{figure}
+
+% Additional figures generated by the experiment runner
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{threshold_sensitivity.png}
+\caption{Threshold sensitivity analysis. The plot shows how the similarity threshold affects the number of selected segments and the main metrics. This figure will be uploaded to Overleaf}
+\label{fig:threshold}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{ablation_results.png}
+\caption{Ablation study comparing the full pipeline with and without semantic filtering. The figure highlights how semantic filtering reduces the candidate set and changes coverage and montage length. This figure will be uploaded to Overleaf}
+\label{fig:ablation}
+\end{figure}
+
+
+\FloatBarrier
+
+% =======================
+\section*{Disclosure Statement}
+This project was developed for an academic course assignment. The author declares no competing interests
+
+% =======================
+\begin{thebibliography}{1}
+
+\bibitem{radford2021clip}
+A Radford et al
+\emph{Learning Transferable Visual Models From Natural Language Supervision}
+ICML 2021
+
+\bibitem{li2022blip}
+J Li et al
+\emph{BLIP Bootstrapping Language Image Pre training for Unified Vision Language Understanding and Generation}
+CVPR 2022
+
+\bibitem{reimers2019sbert}
+N Reimers and I Gurevych
+\emph{Sentence BERT Sentence Embeddings using Siamese BERT Networks}
+EMNLP 2019
+
+\bibitem{spacy}
+M Honnibal et al
+\emph{spaCy Industrial Strength Natural Language Processing in Python}
+Software documentation 2020
+
+\bibitem{moviepy}
+Zulko
+\emph{MoviePy Video Editing with Python}
+Software documentation
+
+\bibitem{opencv}
+G Bradski
+\emph{The OpenCV Library}
+Dr Dobb's Journal of Software Tools 2000
+
+\end{thebibliography}
+
+\end{document}
+

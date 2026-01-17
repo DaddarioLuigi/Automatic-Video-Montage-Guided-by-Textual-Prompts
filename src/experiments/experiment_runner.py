@@ -256,7 +256,8 @@ class ExperimentRunner:
             elif isinstance(obj, list):
                 return [convert_to_serializable(item) for item in obj]
             elif isinstance(obj, tuple):
-                return list(convert_to_serializable(obj))
+                # Convert each element in the tuple, do NOT recurse on the tuple itself
+                return [convert_to_serializable(item) for item in obj]
             return obj
         
         serializable_results = convert_to_serializable(self.results)
