@@ -2,6 +2,45 @@
 
 This project implements an automatic video montage system that selects and merges the most relevant scenes from a video based on user-provided natural language prompts. The pipeline combines motion detection, image captioning, advanced NLP processing, semantic filtering, and similarity matching using CLIP to identify and assemble video segments that match textual descriptions.
 
+## Quick Start (Short)
+
+- **Install**:
+
+```bash
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+```
+
+- **Run (CLI)**:
+
+```bash
+python main.py \
+    --video_path video.mp4 \
+    --prompts "adding ingredients" "closing box" "plating dish" \
+    --output_path outputs/montage.mp4
+```
+
+- **Run (Python)**:
+
+```python
+from src.pipeline import create_montage
+
+output_path = create_montage(
+    video_path="video.mp4",
+    prompts=[
+        "adding the ingredients in the sandwich",
+        "closing the box",
+        "plating the dish"
+    ],
+    output_path="outputs/montage.mp4"
+)
+```
+
+- **More docs**: open the section below.
+
+<details>
+<summary><strong>Full README (expanded)</strong></summary>
+
 ## Features
 
 ### Core Pipeline Features
@@ -522,3 +561,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **spaCy**: Industrial-strength Natural Language Processing
 - **Sentence Transformers**: Reimers & Gurevych, "Sentence-BERT", EMNLP 2019
 - **BART**: Lewis et al., "BART: Denoising Sequence-to-Sequence Pre-training", arXiv 2019
+
+</details>
