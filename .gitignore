@@ -40,8 +40,6 @@ ENV/
 .ipynb_checkpoints
 
 # Output files
-outputs/*.mp4
-outputs/*.avi
 *.pkl
 captions_*.pkl
 
