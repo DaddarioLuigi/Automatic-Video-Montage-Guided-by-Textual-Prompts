@@ -6,18 +6,14 @@ video frames to improve caption quality.
 """
 
 import torch
-import torch.nn as nn
 from torch.utils.data import DataLoader
 from transformers import (
     BlipForConditionalGeneration,
     BlipProcessor,
-    BlipConfig,
     TrainingArguments,
-    Trainer
 )
-from typing import Optional, Dict, List
+from typing import Optional
 from pathlib import Path
-import json
 
 from .dataset import VideoFrameDataset
 

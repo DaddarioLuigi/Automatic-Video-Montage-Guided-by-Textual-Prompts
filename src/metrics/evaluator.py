@@ -6,7 +6,7 @@ of the generated video montage and the pipeline performance.
 """
 
 import numpy as np
-from typing import List, Tuple, Dict, Optional
+from typing import Dict, List, Tuple
 from collections import Counter
 
 
@@ -26,14 +26,11 @@ def compute_precision_recall(similarities: List[Tuple[int, float, str]],
     Returns:
         Dictionary with precision, recall, and F1 score
     """
-    frame_to_score = {idx: score for idx, score, _ in similarities}
-    
     tp = len(selected_segments)
     fp = 0
     fn = 0
     
     for start, end in motion_segments:
-        mid_frame = (start + end) // 2
         score = None
         
         for frame_idx, sim_score, _ in similarities:

@@ -6,13 +6,11 @@ baselines, and ablation studies for research purposes.
 """
 
 import json
-import pickle
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Optional, Any
+from typing import Dict, List, Optional
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 from ..pipeline import VideoMontagePipeline
 from ..metrics import MetricsEvaluator
@@ -50,7 +48,8 @@ class ExperimentRunner:
             Dictionary with results for each threshold
         """
         if thresholds is None:
-            thresholds = list(np.arange(0.15, 0.45, 0.05))
+            # Inclusive upper bound to match plots/paper (0.15 .. 0.45 step 0.05)
+            thresholds = list(np.arange(0.15, 0.46, 0.05))
         
         print(f"\n{'='*60}")
         print(f"THRESHOLD EXPERIMENT")
@@ -186,6 +185,46 @@ class ExperimentRunner:
             self.pipeline.captions,
             0.25
         )
+
+        # Export per-run diagnostic plots (similarity distributions, timeline, durations)
+        try:
+            from ..analysis.analyzer import plot_analysis_results
+            from ..analysis.analyzer import plot_motion_segments_diagnostics
+            from ..motion_detection.detector import plot_motion_diagnostics
+
+            fig_dir = self.output_dir / "figures"
+            plot_analysis_results(
+                similarities=self.pipeline.similarities,
+                selected_segments=self.pipeline.selected_segments,
+                fps=self.pipeline.fps,
+                similarity_threshold=0.25,
+                save_dir=str(fig_dir),
+                prefix="proposed_diagnostics",
+                show=False,
+            )
+
+            # Candidate motion segments diagnostics (before selection)
+            plot_motion_segments_diagnostics(
+                motion_segments=self.pipeline.motion_segments,
+                fps=self.pipeline.fps,
+                save_dir=str(fig_dir),
+                prefix="motion_segments",
+                show=False,
+            )
+
+            # Motion values diagnostics (per-frame)
+            if getattr(self.pipeline.motion_detector, "motions", None) is not None and getattr(
+                self.pipeline.motion_detector, "suggested_threshold", None
+            ) is not None:
+                plot_motion_diagnostics(
+                    motions=self.pipeline.motion_detector.motions,
+                    suggested_threshold=self.pipeline.motion_detector.suggested_threshold,
+                    save_dir=str(fig_dir),
+                    prefix="motion",
+                    show=False,
+                )
+        except Exception as e:
+            print(f"Warning: could not export diagnostic plots ({e})")
         
         print(f"\n[Baselines] Running baseline methods with n_segments={n_segments_proposed}...")
         baseline_runner = BaselineMethods(self.pipeline.fps)

@@ -6,11 +6,10 @@ pairs to improve semantic matching accuracy.
 """
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 import clip
-from typing import Optional, Dict, List
+from typing import Optional
 from pathlib import Path
 import json
 

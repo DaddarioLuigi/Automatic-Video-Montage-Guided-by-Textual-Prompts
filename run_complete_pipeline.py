@@ -17,6 +17,7 @@ def main():
             "closing the box",
             "plating the dish"
         ]
+        report_path = "results/reference_example_report.json"
     else:
         video_path = sys.argv[1]
         prompts = sys.argv[2:] if len(sys.argv) > 2 else [
@@ -24,6 +25,7 @@ def main():
             "closing the box",
             "plating the dish"
         ]
+        report_path = "results/reference_example_report.json"
     
     if not Path(video_path).exists():
         print(f"Error: Video file not found at {video_path}")
@@ -44,7 +46,8 @@ def main():
             enable_semantic_filtering=True,
             enable_analysis=True,
             enable_plots=True,
-            output_path="outputs/test_montage.mp4"
+            output_path="outputs/test_montage.mp4",
+            report_path=report_path
         )
         
         if output_path:

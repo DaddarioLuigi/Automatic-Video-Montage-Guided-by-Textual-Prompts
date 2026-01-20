@@ -12,7 +12,6 @@ Now includes advanced NLP capabilities:
 
 import re
 from typing import List, Tuple, Dict, Set, Optional
-from collections import Counter
 
 # Import advanced modules (optional, with fallback)
 try:

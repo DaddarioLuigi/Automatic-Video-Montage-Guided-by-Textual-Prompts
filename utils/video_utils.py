@@ -3,7 +3,6 @@ Video utility functions.
 """
 
 import cv2
-from typing import Tuple
 
 
 def get_video_properties(video_path: str) -> dict:

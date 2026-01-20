@@ -6,11 +6,9 @@ from video frames and annotations.
 """
 
 import json
-import cv2
 from pathlib import Path
-from typing import List, Tuple, Dict, Optional
+from typing import List
 from PIL import Image
-import numpy as np
 
 from ..pipeline import VideoMontagePipeline
 from ..frame_extraction import extract_center_frames
@@ -40,13 +38,12 @@ def create_finetuning_dataset(video_path: str,
         annotations = json.load(f)
     
     pipeline = VideoMontagePipeline(video_path)
-    
-    import cv2
-    cap = cv2.VideoCapture(video_path)
-    motions = pipeline.motion_detector.analyze(cap)
-    cap = cv2.VideoCapture(video_path)
+
+    pipeline.motion_detector.analyze(video_path, show_plots=False)
     motion_segments = pipeline.motion_detector.detect_segments(
-        cap, pipeline.motion_detector.suggested_threshold
+        video_path,
+        motion_pixel_threshold=pipeline.motion_detector.suggested_threshold,
+        show_plots=False,
     )
     
     frames = extract_center_frames(video_path, motion_segments)

@@ -27,7 +27,7 @@ This project implements an automatic video montage system that selects and merge
 
 ### Research & Development Features
 
-- **Fine-tuning Support**: Fine-tune BLIP and CLIP models for domain-specific videos
+- **Fine-tuning Support**: Fine-tune BLIP and CLIP models for domain-specific videos (see **[`README_FINETUNING.md`](README_FINETUNING.md)**)
 - **Comprehensive Evaluation Metrics**: Precision, Recall, F1, Coverage, Diversity, Coherence
 - **Baseline Comparisons**: Compare with random, uniform, and motion-based selection
 - **Ablation Studies**: Analyze contribution of each pipeline component
@@ -368,6 +368,8 @@ python run_experiments.py \
 
 The pipeline supports fine-tuning BLIP and CLIP models for domain-specific videos:
 
+**Fine-tuning guide**: follow **[`README_FINETUNING.md`](README_FINETUNING.md)** for dataset preparation, training commands, and how to use fine-tuned checkpoints.
+
 ### Quick Fine-Tuning
 
 ```bash
@@ -391,7 +393,7 @@ python scripts/finetune_models.py \
 - CLIP: +20-30% improvement in matching accuracy
 - Overall: Better montage quality for specific domains (cooking, sports, etc.)
 
-See `README_FINETUNING.md` and `FINETUNING_PROPOSAL.md` for detailed guides.
+See **[`README_FINETUNING.md`](README_FINETUNING.md)** 
 
 ## Examples
 
@@ -505,39 +507,9 @@ python -m spacy download en_core_web_sm
 
 If advanced NLP features are not available, the pipeline automatically falls back to basic parsing. This ensures backward compatibility.
 
-## Future Improvements
-
-- [ ] Support for temporal context in captioning (using previous frames)
-- [ ] Enhanced prompt customization options
-- [ ] Automatic threshold optimization
-- [ ] Support for multiple video inputs
-- [ ] Transition effects between segments
-- [ ] Audio track preservation in final montage
-- [ ] Support for video streaming
-- [ ] Multi-language prompt support
-- [ ] End-to-end training of entire pipeline
-- [ ] Real-time processing capabilities
-- [ ] Web interface for easy interaction
-
-## Additional Documentation
-
-- `STRUCTURE.md`: Detailed project structure
-- `TECHNICAL_JUSTIFICATION.md`: Technical design decisions
-- `FINETUNING_PROPOSAL.md`: Fine-tuning guide and research proposal
-- `README_FINETUNING.md`: Fine-tuning instructions
-- `example_advanced_nlp.py`: Advanced NLP usage examples
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-### Areas for Contribution
-
-- Additional NLP models and techniques
-- Performance optimizations
-- New evaluation metrics
-- Documentation improvements
-- Bug fixes and testing
 
 ## License
 
@@ -550,16 +522,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **spaCy**: Industrial-strength Natural Language Processing
 - **Sentence Transformers**: Reimers & Gurevych, "Sentence-BERT", EMNLP 2019
 - **BART**: Lewis et al., "BART: Denoising Sequence-to-Sequence Pre-training", arXiv 2019
-
-## Contact
-
-For questions, issues, or suggestions, please open an issue on GitHub.
-
----
-
-**Note**: This project is suitable for NLP courses as it demonstrates:
-- Advanced linguistic parsing (POS tagging, NER, dependency parsing)
-- Semantic understanding with embeddings
-- Text generation and summarization
-- Integration of multiple NLP components in a practical application
-- State-of-the-art vision-language models (BLIP, CLIP)

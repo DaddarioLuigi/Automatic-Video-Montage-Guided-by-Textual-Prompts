@@ -71,14 +71,14 @@ def example_step_by_step():
     print("=" * 60)
     
     pipeline = VideoMontagePipeline("path/to/your/video.mp4")
-    
+
     # Step 1: Motion Detection
     print("\n[1] Running motion detection...")
-    cap = __import__('cv2').VideoCapture(pipeline.video_path)
-    motions = pipeline.motion_detector.analyze(cap)
-    cap = __import__('cv2').VideoCapture(pipeline.video_path)
+    pipeline.motion_detector.analyze(pipeline.video_path, show_plots=False)
     pipeline.motion_segments = pipeline.motion_detector.detect_segments(
-        cap, pipeline.motion_detector.suggested_threshold
+        pipeline.video_path,
+        motion_pixel_threshold=pipeline.motion_detector.suggested_threshold,
+        show_plots=False,
     )
     print(f"   Detected {len(pipeline.motion_segments)} segments")
     
@@ -140,10 +140,5 @@ if __name__ == "__main__":
     print("  1. example_simple() - Simple usage")
     print("  2. example_advanced() - Advanced usage with custom parameters")
     print("  3. example_step_by_step() - Manual step-by-step execution")
-    print("\nUncomment the example you want to run:\n")
-    
-    # Uncomment the example you want to run:
-    # example_simple()
-    # example_advanced()
-    # example_step_by_step()
+    print("\nEdit this file and call one of the functions above to run an example.\n")
 

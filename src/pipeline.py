@@ -13,6 +13,8 @@ This module orchestrates the complete pipeline:
 
 import cv2
 import torch
+import json
+from pathlib import Path
 from typing import List, Optional
 
 from .motion_detection import MotionDetector
@@ -68,6 +70,7 @@ class VideoMontagePipeline:
                              similarity_threshold: float = 0.25,
                              enable_semantic_filtering: bool = True,
                              output_path: str = "outputs/final_montage.mp4",
+                             report_path: Optional[str] = None,
                              enable_analysis: bool = True,
                              enable_plots: bool = True) -> str:
         """
@@ -176,22 +179,122 @@ class VideoMontagePipeline:
             self.selected_segments, output_path
         )
         print(f"   Montage created: {output_path}")
+
+        # Optional: export a lightweight run report for transparency/reproducibility
+        if report_path:
+            try:
+                report = self._build_run_report(
+                    prompts=prompts,
+                    pixel_change_threshold=pixel_change_threshold,
+                    motion_pixel_threshold=motion_pixel_threshold,
+                    similarity_threshold=similarity_threshold,
+                    enable_semantic_filtering=enable_semantic_filtering,
+                    output_path=output_path,
+                )
+                report_file = Path(report_path)
+                report_file.parent.mkdir(parents=True, exist_ok=True)
+                report_file.write_text(json.dumps(report, indent=2), encoding="utf-8")
+                print(f"   Run report saved: {report_file}")
+            except Exception as e:
+                print(f"   Warning: could not write run report ({e})")
         
         print("\n" + "=" * 60)
         print("PIPELINE COMPLETED SUCCESSFULLY")
         print("=" * 60)
         
         return output_path
-    
-    def run_step_by_step(self):
-        """Run pipeline step by step with interactive prompts."""
-        pass
 
+    def _build_run_report(
+        self,
+        prompts: List[str],
+        pixel_change_threshold: int,
+        motion_pixel_threshold: int,
+        similarity_threshold: float,
+        enable_semantic_filtering: bool,
+        output_path: str,
+    ) -> dict:
+        """Build a JSON-serializable report of the pipeline run."""
+        filtered_frame_indices = set()
+        # Similarities are computed only for captions_for_matching (possibly filtered),
+        # but we want to mark which original captions made it to the CLIP stage.
+        if self.similarities:
+            filtered_frame_indices = {idx for idx, _, _ in self.similarities}
 
-def create_montage(video_path: str,
-                   prompts: List[str],
-                   output_path: str = "outputs/final_montage.mp4",
-                   **kwargs) -> str:
+        score_by_frame = {}
+        caption_by_frame_from_sim = {}
+        if self.similarities:
+            for idx, score, caption in self.similarities:
+                score_by_frame[idx] = float(score)
+                caption_by_frame_from_sim[idx] = caption
+
+        # Map center-frame indices to their motion segment
+        frame_to_segment = {}
+        if self.motion_segments and self.frames:
+            frame_indices = [idx for idx, _ in self.frames]
+            for start, end in self.motion_segments:
+                for idx in frame_indices:
+                    if start <= idx <= end:
+                        frame_to_segment[idx] = (int(start), int(end))
+
+        selected_segment_set = set(tuple(map(int, seg)) for seg in (self.selected_segments or []))
+
+        captions_rows = []
+        for idx, caption in (self.captions or []):
+            seg = frame_to_segment.get(idx)
+            seg_start, seg_end = (seg if seg else (None, None))
+            clip_score = score_by_frame.get(idx)
+            passed_filter = idx in filtered_frame_indices if enable_semantic_filtering else True
+            selected = (seg is not None and (int(seg_start), int(seg_end)) in selected_segment_set)
+
+            captions_rows.append(
+                {
+                    "frame_index": int(idx),
+                    "segment_start": seg_start,
+                    "segment_end": seg_end,
+                    "caption": caption,
+                    "passed_semantic_filter": bool(passed_filter),
+                    "clip_score": clip_score,
+                    "selected": bool(selected),
+                }
+            )
+
+        # Convenience: top captions by score (only among those scored by CLIP)
+        top_scored = []
+        if self.similarities:
+            top_scored = sorted(
+                [{"frame_index": int(i), "clip_score": float(s), "caption": c} for i, s, c in self.similarities],
+                key=lambda x: x["clip_score"],
+                reverse=True,
+            )[:10]
+
+        return {
+            "video_path": self.video_path,
+            "output_path": str(output_path),
+            "prompts": list(prompts),
+            "parameters": {
+                "pixel_change_threshold": int(pixel_change_threshold),
+                "motion_pixel_threshold": int(motion_pixel_threshold) if motion_pixel_threshold is not None else None,
+                "similarity_threshold": float(similarity_threshold),
+                "enable_semantic_filtering": bool(enable_semantic_filtering),
+            },
+            "counts": {
+                "motion_segments": len(self.motion_segments or []),
+                "frames": len(self.frames or []),
+                "captions": len(self.captions or []),
+                "captions_scored_by_clip": len(self.similarities or []),
+                "selected_segments": len(self.selected_segments or []),
+            },
+            "selected_segments": [list(map(int, s)) for s in (self.selected_segments or [])],
+            "captions_table": captions_rows,
+            "top_scored_captions": top_scored,
+        }
+
+def create_montage(
+    video_path: str,
+    prompts: List[str],
+    output_path: str = "outputs/final_montage.mp4",
+    **kwargs,
+) -> str:
     """
     Convenience function to create a video montage.
     

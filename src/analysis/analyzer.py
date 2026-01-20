@@ -7,11 +7,12 @@ sensitivity experiments for the video montage pipeline.
 
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import List, Tuple, Dict
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 
 def analyze_pipeline(motion_segments: List[Tuple[int, int]],
-                    frames: List[Tuple[int, any]],
+                    frames: List[Tuple[int, Any]],
                     captions: List[Tuple[int, str]],
                     similarities: List[Tuple[int, float, str]],
                     selected_segments: List[Tuple[int, int]],
@@ -95,10 +96,11 @@ def threshold_sensitivity_analysis(similarities: List[Tuple[int, float, str]],
         Dictionary with threshold analysis results
     """
     if thresholds is None:
-        thresholds = list(np.arange(0.15, 0.45, 0.05))
+        # Inclusive upper bound to match paper/plots (0.15 .. 0.45 step 0.05)
+        thresholds = list(np.arange(0.15, 0.46, 0.05))
     
     frame_to_segment = {}
-    for seg_idx, (start, end) in enumerate(motion_segments):
+    for start, end in motion_segments:
         for frame_idx, _, _ in similarities:
             if start <= frame_idx <= end:
                 frame_to_segment[frame_idx] = (start, end)
@@ -127,16 +129,29 @@ def threshold_sensitivity_analysis(similarities: List[Tuple[int, float, str]],
     }
 
 
-def plot_analysis_results(similarities: List[Tuple[int, float, str]],
-                          selected_segments: List[Tuple[int, int]],
-                          fps: float,
-                          similarity_threshold: float = 0.25):
-    """Create visualization plots for pipeline analysis."""
+def plot_analysis_results(
+    similarities: List[Tuple[int, float, str]],
+    selected_segments: List[Tuple[int, int]],
+    fps: float,
+    similarity_threshold: float = 0.25,
+    save_dir: Optional[str] = None,
+    prefix: str = "analysis",
+    show: bool = True,
+):
+    """
+    Create visualization plots for pipeline analysis.
+
+    If save_dir is provided, figures are exported as PNG and the function does not
+    require an interactive backend (show can be False).
+    """
     scores = [score for _, score, _ in similarities]
-    
-    plt.figure(figsize=(14, 10))
-    plt.subplot(2, 2, 1)
-    plt.hist(scores, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
+    out_dir = Path(save_dir) if save_dir else None
+    if out_dir:
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+    # 1) Similarity score distribution
+    plt.figure(figsize=(10, 5))
+    plt.hist(scores, bins=30, color='steelblue', edgecolor='black', alpha=0.75)
     plt.axvline(
         similarity_threshold,
         color='red',
@@ -148,8 +163,16 @@ def plot_analysis_results(similarities: List[Tuple[int, float, str]],
     plt.ylabel('Frequency', fontsize=11)
     plt.title('Distribution of Similarity Scores', fontsize=12, fontweight='bold')
     plt.legend()
-    plt.grid(True, alpha=0.3, axis='y')
-    plt.subplot(2, 2, 2)
+    plt.grid(True, alpha=0.25, axis='y')
+    plt.tight_layout()
+    if out_dir:
+        plt.savefig(out_dir / f"{prefix}_similarity_distribution.png", dpi=300, bbox_inches="tight")
+    if show:
+        plt.show()
+    plt.close()
+
+    # 2) Sorted similarities
+    plt.figure(figsize=(10, 5))
     sorted_scores = sorted(scores, reverse=True)
     plt.plot(sorted_scores, marker='o', markersize=3, linewidth=1.5, alpha=0.7)
     plt.axhline(
@@ -163,30 +186,57 @@ def plot_analysis_results(similarities: List[Tuple[int, float, str]],
     plt.ylabel('CLIP Similarity Score', fontsize=11)
     plt.title('Similarity Scores (Sorted)', fontsize=12, fontweight='bold')
     plt.legend()
-    plt.grid(True, alpha=0.3)
-    
+    plt.grid(True, alpha=0.25)
+    plt.tight_layout()
+    if out_dir:
+        plt.savefig(out_dir / f"{prefix}_similarity_sorted.png", dpi=300, bbox_inches="tight")
+    if show:
+        plt.show()
+    plt.close()
+
     if selected_segments:
-        plt.subplot(2, 2, 3)
+        # 3) Temporal distribution of selected segments
+        plt.figure(figsize=(10, 5))
         segment_starts = [s / fps for s, _ in selected_segments]
-        segment_lengths = [(e - s) / fps for s, e in selected_segments]
-        
-        plt.barh(range(len(selected_segments)), segment_starts, 
-                height=0.6, color='steelblue', alpha=0.7, edgecolor='black')
+        plt.barh(
+            range(len(selected_segments)),
+            segment_starts,
+            height=0.6,
+            color='steelblue',
+            alpha=0.75,
+            edgecolor='black',
+        )
         plt.xlabel('Time (seconds)', fontsize=11)
-        plt.ylabel('Segment Index', fontsize=11)
+        plt.ylabel('Selected Segment Index', fontsize=11)
         plt.title('Temporal Distribution of Selected Segments', fontsize=12, fontweight='bold')
-        plt.grid(True, alpha=0.3, axis='x')
-        
-        plt.subplot(2, 2, 4)
-        plt.bar(range(len(selected_segments)), segment_lengths, 
-               color='coral', alpha=0.7, edgecolor='black')
-        plt.xlabel('Segment Index', fontsize=11)
+        plt.grid(True, alpha=0.25, axis='x')
+        plt.tight_layout()
+        if out_dir:
+            plt.savefig(out_dir / f"{prefix}_selected_segments_timeline.png", dpi=300, bbox_inches="tight")
+        if show:
+            plt.show()
+        plt.close()
+
+        # 4) Duration distribution
+        plt.figure(figsize=(10, 5))
+        segment_lengths = [(e - s) / fps for s, e in selected_segments]
+        plt.bar(
+            range(len(selected_segments)),
+            segment_lengths,
+            color='coral',
+            alpha=0.75,
+            edgecolor='black',
+        )
+        plt.xlabel('Selected Segment Index', fontsize=11)
         plt.ylabel('Duration (seconds)', fontsize=11)
         plt.title('Duration of Selected Segments', fontsize=12, fontweight='bold')
-        plt.grid(True, alpha=0.3, axis='y')
-    
-    plt.tight_layout()
-    plt.show()
+        plt.grid(True, alpha=0.25, axis='y')
+        plt.tight_layout()
+        if out_dir:
+            plt.savefig(out_dir / f"{prefix}_selected_segments_duration.png", dpi=300, bbox_inches="tight")
+        if show:
+            plt.show()
+        plt.close()
 
 
 class PipelineAnalyzer:
@@ -197,7 +247,7 @@ class PipelineAnalyzer:
         self.analysis_results = None
     
     def analyze(self, motion_segments: List[Tuple[int, int]],
-                frames: List[Tuple[int, any]],
+                frames: List[Tuple[int, Any]],
                 captions: List[Tuple[int, str]],
                 similarities: List[Tuple[int, float, str]],
                 selected_segments: List[Tuple[int, int]],
@@ -241,4 +291,65 @@ class PipelineAnalyzer:
             print(f"   - Compression ratio: {sel_stats['compression_ratio']:.2%}")
         
         print("\n" + "=" * 60)
+
+
+def plot_motion_segments_diagnostics(
+    motion_segments: List[Tuple[int, int]],
+    fps: float,
+    save_dir: Optional[str] = None,
+    prefix: str = "motion_segments",
+    show: bool = False,
+):
+    """
+    Plot diagnostics for candidate motion segments (before semantic selection).
+
+    Exports:
+    - timeline plot of motion segments (start time by segment index)
+    - histogram of motion segment durations
+    """
+    if not motion_segments:
+        return
+
+    out_dir = Path(save_dir) if save_dir else None
+    if out_dir:
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+    sorted_segments = sorted(motion_segments, key=lambda x: x[0])
+    starts_s = [s / fps for s, _ in sorted_segments]
+    durations_s = [(e - s) / fps for s, e in sorted_segments]
+
+    # Timeline: start time per segment index (gives a quick view of segment density)
+    plt.figure(figsize=(10, 5))
+    plt.barh(
+        range(len(sorted_segments)),
+        starts_s,
+        height=0.6,
+        color='slategray',
+        alpha=0.75,
+        edgecolor='black',
+    )
+    plt.xlabel('Time (seconds)', fontsize=11)
+    plt.ylabel('Motion Segment Index', fontsize=11)
+    plt.title('Temporal Distribution of Motion Segments', fontsize=12, fontweight='bold')
+    plt.grid(True, alpha=0.25, axis='x')
+    plt.tight_layout()
+    if out_dir:
+        plt.savefig(out_dir / f"{prefix}_timeline.png", dpi=300, bbox_inches="tight")
+    if show:
+        plt.show()
+    plt.close()
+
+    # Duration distribution
+    plt.figure(figsize=(10, 5))
+    plt.hist(durations_s, bins=30, color='slategray', edgecolor='black', alpha=0.75)
+    plt.xlabel('Duration (seconds)', fontsize=11)
+    plt.ylabel('Number of Motion Segments', fontsize=11)
+    plt.title('Distribution of Motion Segment Durations', fontsize=12, fontweight='bold')
+    plt.grid(True, alpha=0.25, axis='y')
+    plt.tight_layout()
+    if out_dir:
+        plt.savefig(out_dir / f"{prefix}_duration_distribution.png", dpi=300, bbox_inches="tight")
+    if show:
+        plt.show()
+    plt.close()
 

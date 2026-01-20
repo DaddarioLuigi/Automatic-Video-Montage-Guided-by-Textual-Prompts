@@ -7,8 +7,9 @@ This module provides:
 - Alternative description generation
 """
 
-from typing import List, Tuple, Dict, Optional
-from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
+from typing import List, Optional, Tuple
+
+from transformers import pipeline
 import torch
 import warnings
 
@@ -190,19 +191,7 @@ class TextGenerator:
         else:
             expanded_text = prompt
         
-        # Use summarization in reverse - generate longer version
-        # This is a simple approach; for better results, use a text generation model
-        try:
-            # Try to generate a longer version by using summarization with longer target
-            words = prompt.split()
-            target_length = len(words) * 2
-            
-            # This is a workaround - in practice, you'd use a text generation model
-            # For now, we'll just return an expanded version manually
-            expanded = f"a scene showing {prompt}"
-            return expanded
-        except Exception:
-            return prompt
+        return f"a scene showing {expanded_text}"
     
     def create_prompt_variations(self,
                                 prompt: str,

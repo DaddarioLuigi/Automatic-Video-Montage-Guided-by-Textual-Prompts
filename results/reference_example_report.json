@@ -1,0 +1,916 @@
+{
+  "video_path": "data/videos/1.mp4",
+  "output_path": "outputs/test_montage.mp4",
+  "prompts": [
+    "adding the ingredients in the sandwich",
+    "closing the box",
+    "plating the dish"
+  ],
+  "parameters": {
+    "pixel_change_threshold": 25,
+    "motion_pixel_threshold": 190962,
+    "similarity_threshold": 0.25,
+    "enable_semantic_filtering": true
+  },
+  "counts": {
+    "motion_segments": 74,
+    "frames": 74,
+    "captions": 74,
+    "captions_scored_by_clip": 43,
+    "selected_segments": 43
+  },
+  "selected_segments": [
+    [
+      1,
+      14
+    ],
+    [
+      66,
+      96
+    ],
+    [
+      102,
+      126
+    ],
+    [
+      199,
+      208
+    ],
+    [
+      270,
+      288
+    ],
+    [
+      295,
+      319
+    ],
+    [
+      346,
+      350
+    ],
+    [
+      364,
+      383
+    ],
+    [
+      436,
+      441
+    ],
+    [
+      510,
+      515
+    ],
+    [
+      698,
+      704
+    ],
+    [
+      754,
+      766
+    ],
+    [
+      781,
+      790
+    ],
+    [
+      868,
+      885
+    ],
+    [
+      894,
+      907
+    ],
+    [
+      955,
+      956
+    ],
+    [
+      994,
+      1002
+    ],
+    [
+      1171,
+      1172
+    ],
+    [
+      1210,
+      1225
+    ],
+    [
+      1232,
+      1251
+    ],
+    [
+      1330,
+      1331
+    ],
+    [
+      1609,
+      1618
+    ],
+    [
+      1761,
+      1798
+    ],
+    [
+      1967,
+      1972
+    ],
+    [
+      1985,
+      1990
+    ],
+    [
+      2077,
+      2086
+    ],
+    [
+      2304,
+      2309
+    ],
+    [
+      2747,
+      2755
+    ],
+    [
+      2784,
+      2813
+    ],
+    [
+      2814,
+      2818
+    ],
+    [
+      2967,
+      2974
+    ],
+    [
+      3024,
+      3026
+    ],
+    [
+      3029,
+      3030
+    ],
+    [
+      3051,
+      3068
+    ],
+    [
+      3073,
+      3091
+    ],
+    [
+      3169,
+      3180
+    ],
+    [
+      3190,
+      3195
+    ],
+    [
+      3356,
+      3358
+    ],
+    [
+      3367,
+      3372
+    ],
+    [
+      3399,
+      3420
+    ],
+    [
+      3472,
+      3475
+    ],
+    [
+      3476,
+      3481
+    ],
+    [
+      3718,
+      3720
+    ]
+  ],
+  "captions_table": [
+    {
+      "frame_index": 7,
+      "segment_start": 1,
+      "segment_end": 14,
+      "caption": "a person is putting a hamburger in a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7625223398208618,
+      "selected": true
+    },
+    {
+      "frame_index": 81,
+      "segment_start": 66,
+      "segment_end": 96,
+      "caption": "a person is putting a sandwich in a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8202688097953796,
+      "selected": true
+    },
+    {
+      "frame_index": 114,
+      "segment_start": 102,
+      "segment_end": 126,
+      "caption": "a person is putting a sandwich in a restaurant",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8309432864189148,
+      "selected": true
+    },
+    {
+      "frame_index": 162,
+      "segment_start": 143,
+      "segment_end": 181,
+      "caption": "a person is putting a hot dog in a hot dog machine",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 203,
+      "segment_start": 199,
+      "segment_end": 208,
+      "caption": "a person is putting a hamburger in a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7625223398208618,
+      "selected": true
+    },
+    {
+      "frame_index": 279,
+      "segment_start": 270,
+      "segment_end": 288,
+      "caption": "a person is putting food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8050493597984314,
+      "selected": true
+    },
+    {
+      "frame_index": 307,
+      "segment_start": 295,
+      "segment_end": 319,
+      "caption": "a person is holding a large piece of cheese",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7162252068519592,
+      "selected": true
+    },
+    {
+      "frame_index": 348,
+      "segment_start": 346,
+      "segment_end": 350,
+      "caption": "a person is putting a sandwich into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8246170282363892,
+      "selected": true
+    },
+    {
+      "frame_index": 373,
+      "segment_start": 364,
+      "segment_end": 383,
+      "caption": "a person is putting food into a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8315359950065613,
+      "selected": true
+    },
+    {
+      "frame_index": 399,
+      "segment_start": 389,
+      "segment_end": 409,
+      "caption": "a person is sitting at a counter with food",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 429,
+      "segment_start": 424,
+      "segment_end": 434,
+      "caption": "a person is holding a knife in front of a counter",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 438,
+      "segment_start": 436,
+      "segment_end": 441,
+      "caption": "a person is putting a piece of pizza",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8194569945335388,
+      "selected": true
+    },
+    {
+      "frame_index": 479,
+      "segment_start": 470,
+      "segment_end": 489,
+      "caption": "a person is standing in front of a counter",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 505,
+      "segment_start": 502,
+      "segment_end": 508,
+      "caption": "a person is standing in front of a counter",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 512,
+      "segment_start": 510,
+      "segment_end": 515,
+      "caption": "a person is putting food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8050493597984314,
+      "selected": true
+    },
+    {
+      "frame_index": 701,
+      "segment_start": 698,
+      "segment_end": 704,
+      "caption": "a person is putting a sandwich in a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8202688097953796,
+      "selected": true
+    },
+    {
+      "frame_index": 760,
+      "segment_start": 754,
+      "segment_end": 766,
+      "caption": "a person is putting food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8050493597984314,
+      "selected": true
+    },
+    {
+      "frame_index": 785,
+      "segment_start": 781,
+      "segment_end": 790,
+      "caption": "a person is putting a sandwich in a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8363458514213562,
+      "selected": true
+    },
+    {
+      "frame_index": 830,
+      "segment_start": 822,
+      "segment_end": 839,
+      "caption": "a person is pouring a salad into a blend",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 876,
+      "segment_start": 868,
+      "segment_end": 885,
+      "caption": "a person is pouring some food into a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7842749953269958,
+      "selected": true
+    },
+    {
+      "frame_index": 900,
+      "segment_start": 894,
+      "segment_end": 907,
+      "caption": "a person is putting food in a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8317694664001465,
+      "selected": true
+    },
+    {
+      "frame_index": 955,
+      "segment_start": 955,
+      "segment_end": 956,
+      "caption": "a person is putting a piece of cheese into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7718340754508972,
+      "selected": true
+    },
+    {
+      "frame_index": 998,
+      "segment_start": 994,
+      "segment_end": 1002,
+      "caption": "a person is putting cheese on a sandwich",
+      "passed_semantic_filter": true,
+      "clip_score": 0.855929970741272,
+      "selected": true
+    },
+    {
+      "frame_index": 1171,
+      "segment_start": 1171,
+      "segment_end": 1172,
+      "caption": "a person is putting a cup of food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7876967191696167,
+      "selected": true
+    },
+    {
+      "frame_index": 1217,
+      "segment_start": 1210,
+      "segment_end": 1225,
+      "caption": "a person is putting a piece of food into a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8250173926353455,
+      "selected": true
+    },
+    {
+      "frame_index": 1241,
+      "segment_start": 1232,
+      "segment_end": 1251,
+      "caption": "a person is putting cheese into a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7868381142616272,
+      "selected": true
+    },
+    {
+      "frame_index": 1330,
+      "segment_start": 1330,
+      "segment_end": 1331,
+      "caption": "a person is cutting cheese on a cutting board",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7130576968193054,
+      "selected": true
+    },
+    {
+      "frame_index": 1350,
+      "segment_start": 1350,
+      "segment_end": 1351,
+      "caption": "a person is putting something in a container",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1472,
+      "segment_start": 1465,
+      "segment_end": 1479,
+      "caption": "a person is putting something in a container",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1533,
+      "segment_start": 1515,
+      "segment_end": 1552,
+      "caption": "a person is putting a plastic bag in a kitchen",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1580,
+      "segment_start": 1567,
+      "segment_end": 1594,
+      "caption": "a person in blue gloves is holding a piece of meat",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1613,
+      "segment_start": 1609,
+      "segment_end": 1618,
+      "caption": "a person is putting something into a pan",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8304463028907776,
+      "selected": true
+    },
+    {
+      "frame_index": 1758,
+      "segment_start": 1757,
+      "segment_end": 1760,
+      "caption": "a person is standing on a stove in a kitchen",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1779,
+      "segment_start": 1761,
+      "segment_end": 1798,
+      "caption": "a person is putting a bag of food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7895991802215576,
+      "selected": true
+    },
+    {
+      "frame_index": 1912,
+      "segment_start": 1904,
+      "segment_end": 1921,
+      "caption": "a person is cleaning a tiled floor",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1927,
+      "segment_start": 1927,
+      "segment_end": 1928,
+      "caption": "a person is putting something into a machine",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1939,
+      "segment_start": 1934,
+      "segment_end": 1944,
+      "caption": "a man is using a knife to remove the bottom of a stove",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1957,
+      "segment_start": 1953,
+      "segment_end": 1962,
+      "caption": "a person is standing on a counter with a pan",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 1969,
+      "segment_start": 1967,
+      "segment_end": 1972,
+      "caption": "a person is putting something on the grill",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8198148608207703,
+      "selected": true
+    },
+    {
+      "frame_index": 1987,
+      "segment_start": 1985,
+      "segment_end": 1990,
+      "caption": "a person is putting a piece of food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8071963787078857,
+      "selected": true
+    },
+    {
+      "frame_index": 2003,
+      "segment_start": 2001,
+      "segment_end": 2005,
+      "caption": "a person is putting something into a machine",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 2046,
+      "segment_start": 2034,
+      "segment_end": 2058,
+      "caption": "a person is putting something into a machine",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 2070,
+      "segment_start": 2067,
+      "segment_end": 2073,
+      "caption": "a person holding a cell phone in front of a machine",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 2081,
+      "segment_start": 2077,
+      "segment_end": 2086,
+      "caption": "a person is using a tablet to check the food",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7930640578269958,
+      "selected": true
+    },
+    {
+      "frame_index": 2297,
+      "segment_start": 2297,
+      "segment_end": 2298,
+      "caption": "a person holding a cell phone in front of a machine",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 2301,
+      "segment_start": 2299,
+      "segment_end": 2303,
+      "caption": "a person holding a cell phone in front of a machine",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 2306,
+      "segment_start": 2304,
+      "segment_end": 2309,
+      "caption": "a person using a cell phone to check the food",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8011235594749451,
+      "selected": true
+    },
+    {
+      "frame_index": 2751,
+      "segment_start": 2747,
+      "segment_end": 2755,
+      "caption": "a person holding a plate with a hamburger on it",
+      "passed_semantic_filter": true,
+      "clip_score": 0.6884126663208008,
+      "selected": true
+    },
+    {
+      "frame_index": 2798,
+      "segment_start": 2784,
+      "segment_end": 2813,
+      "caption": "a man is putting a hamburger in a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7754912376403809,
+      "selected": true
+    },
+    {
+      "frame_index": 2816,
+      "segment_start": 2814,
+      "segment_end": 2818,
+      "caption": "a person is putting cheese on a plate",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7938611507415771,
+      "selected": true
+    },
+    {
+      "frame_index": 2838,
+      "segment_start": 2830,
+      "segment_end": 2846,
+      "caption": "a person is sitting at a counter with food",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 2871,
+      "segment_start": 2863,
+      "segment_end": 2880,
+      "caption": "a person is sitting at a counter with food",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 2970,
+      "segment_start": 2967,
+      "segment_end": 2974,
+      "caption": "a person is putting cheese on a plate",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7938611507415771,
+      "selected": true
+    },
+    {
+      "frame_index": 3004,
+      "segment_start": 2996,
+      "segment_end": 3012,
+      "caption": "a person is sitting at a counter with food",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3025,
+      "segment_start": 3024,
+      "segment_end": 3026,
+      "caption": "a person is putting food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8050493597984314,
+      "selected": true
+    },
+    {
+      "frame_index": 3029,
+      "segment_start": 3029,
+      "segment_end": 3030,
+      "caption": "a person is eating a hamburger",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8088091611862183,
+      "selected": true
+    },
+    {
+      "frame_index": 3059,
+      "segment_start": 3051,
+      "segment_end": 3068,
+      "caption": "a person is putting cheese into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.7738139629364014,
+      "selected": true
+    },
+    {
+      "frame_index": 3082,
+      "segment_start": 3073,
+      "segment_end": 3091,
+      "caption": "a person is putting food into a container",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8315359950065613,
+      "selected": true
+    },
+    {
+      "frame_index": 3140,
+      "segment_start": 3139,
+      "segment_end": 3142,
+      "caption": "a person is sitting at a counter with food",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3167,
+      "segment_start": 3166,
+      "segment_end": 3168,
+      "caption": "a person is sitting at a counter with food",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3174,
+      "segment_start": 3169,
+      "segment_end": 3180,
+      "caption": "a person is cutting up some food in a kitchen",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8493640422821045,
+      "selected": true
+    },
+    {
+      "frame_index": 3192,
+      "segment_start": 3190,
+      "segment_end": 3195,
+      "caption": "a person is putting food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8050493597984314,
+      "selected": true
+    },
+    {
+      "frame_index": 3357,
+      "segment_start": 3356,
+      "segment_end": 3358,
+      "caption": "a person is putting food into a box",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8665148615837097,
+      "selected": true
+    },
+    {
+      "frame_index": 3369,
+      "segment_start": 3367,
+      "segment_end": 3372,
+      "caption": "a person is putting food into a machine",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8050493597984314,
+      "selected": true
+    },
+    {
+      "frame_index": 3409,
+      "segment_start": 3399,
+      "segment_end": 3420,
+      "caption": "a person is putting a piece of pizza",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8194569945335388,
+      "selected": true
+    },
+    {
+      "frame_index": 3441,
+      "segment_start": 3434,
+      "segment_end": 3449,
+      "caption": "a person is standing in a kitchen with boxes",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3457,
+      "segment_start": 3456,
+      "segment_end": 3459,
+      "caption": "a person is putting a piece of paper in a kitchen",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3473,
+      "segment_start": 3472,
+      "segment_end": 3475,
+      "caption": "a person is putting a box of pizza",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8379778861999512,
+      "selected": true
+    },
+    {
+      "frame_index": 3478,
+      "segment_start": 3476,
+      "segment_end": 3481,
+      "caption": "a person is putting a piece of cheese on a counter",
+      "passed_semantic_filter": true,
+      "clip_score": 0.76189124584198,
+      "selected": true
+    },
+    {
+      "frame_index": 3577,
+      "segment_start": 3558,
+      "segment_end": 3597,
+      "caption": "a person is standing in a kitchen with a knife",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3615,
+      "segment_start": 3600,
+      "segment_end": 3631,
+      "caption": "a man is standing in a kitchen with a knife",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3638,
+      "segment_start": 3632,
+      "segment_end": 3644,
+      "caption": "a person is putting something into a container",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3673,
+      "segment_start": 3649,
+      "segment_end": 3697,
+      "caption": "a person holding a cell phone in a kitchen",
+      "passed_semantic_filter": false,
+      "clip_score": null,
+      "selected": false
+    },
+    {
+      "frame_index": 3719,
+      "segment_start": 3718,
+      "segment_end": 3720,
+      "caption": "a person is putting something into a bowl",
+      "passed_semantic_filter": true,
+      "clip_score": 0.8467845320701599,
+      "selected": true
+    }
+  ],
+  "top_scored_captions": [
+    {
+      "frame_index": 3357,
+      "clip_score": 0.8665148615837097,
+      "caption": "a person is putting food into a box"
+    },
+    {
+      "frame_index": 998,
+      "clip_score": 0.855929970741272,
+      "caption": "a person is putting cheese on a sandwich"
+    },
+    {
+      "frame_index": 3174,
+      "clip_score": 0.8493640422821045,
+      "caption": "a person is cutting up some food in a kitchen"
+    },
+    {
+      "frame_index": 3719,
+      "clip_score": 0.8467845320701599,
+      "caption": "a person is putting something into a bowl"
+    },
+    {
+      "frame_index": 3473,
+      "clip_score": 0.8379778861999512,
+      "caption": "a person is putting a box of pizza"
+    },
+    {
+      "frame_index": 785,
+      "clip_score": 0.8363458514213562,
+      "caption": "a person is putting a sandwich in a container"
+    },
+    {
+      "frame_index": 900,
+      "clip_score": 0.8317694664001465,
+      "caption": "a person is putting food in a container"
+    },
+    {
+      "frame_index": 373,
+      "clip_score": 0.8315359950065613,
+      "caption": "a person is putting food into a container"
+    },
+    {
+      "frame_index": 3082,
+      "clip_score": 0.8315359950065613,
+      "caption": "a person is putting food into a container"
+    },
+    {
+      "frame_index": 114,
+      "clip_score": 0.8309432864189148,
+      "caption": "a person is putting a sandwich in a restaurant"
+    }
+  ]
+}

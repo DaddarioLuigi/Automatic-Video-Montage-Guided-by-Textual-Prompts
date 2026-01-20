@@ -8,7 +8,69 @@ dynamic segments in videos.
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import List, Tuple, Optional
+from pathlib import Path
+from typing import List, Tuple, Optional, Union
+
+
+def plot_motion_diagnostics(
+    motions: np.ndarray,
+    suggested_threshold: Union[int, float],
+    save_dir: Optional[str] = None,
+    prefix: str = "motion",
+    show: bool = False,
+):
+    """
+    Plot motion diagnostics (motion over time + distribution).
+
+    If save_dir is provided, figures are exported as PNG.
+    """
+    out_dir = Path(save_dir) if save_dir else None
+    if out_dir:
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Motion over time
+    plt.figure(figsize=(12, 4.5))
+    plt.plot(motions, label='Motion (changed pixels)', linewidth=1.5, alpha=0.75)
+    plt.axhline(
+        suggested_threshold,
+        color='red',
+        linestyle='--',
+        linewidth=2,
+        label=f'Suggested threshold ({int(suggested_threshold)})',
+    )
+    plt.title('Motion Detection: Pixel Changes per Frame', fontsize=13, fontweight='bold')
+    plt.xlabel('Frame Index', fontsize=11)
+    plt.ylabel('Motion (pixels changed)', fontsize=11)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.25)
+    plt.tight_layout()
+    if out_dir:
+        plt.savefig(out_dir / f"{prefix}_over_time.png", dpi=300, bbox_inches="tight")
+    if show:
+        plt.show()
+    plt.close()
+
+    # Distribution
+    plt.figure(figsize=(10, 4.5))
+    plt.hist(motions, bins=30, color='skyblue', edgecolor='black', alpha=0.75)
+    plt.axvline(
+        suggested_threshold,
+        color='red',
+        linestyle='--',
+        linewidth=2,
+        label=f'Suggested threshold ({int(suggested_threshold)})',
+    )
+    plt.title('Distribution of Motion Values', fontsize=13, fontweight='bold')
+    plt.xlabel('Motion (pixels changed)', fontsize=11)
+    plt.ylabel('Number of Frames', fontsize=11)
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.25, axis='y')
+    plt.tight_layout()
+    if out_dir:
+        plt.savefig(out_dir / f"{prefix}_distribution.png", dpi=300, bbox_inches="tight")
+    if show:
+        plt.show()
+    plt.close()
 
 
 def analyze_motion(cap, pixel_change_threshold: int = 25, show_plots: bool = False):

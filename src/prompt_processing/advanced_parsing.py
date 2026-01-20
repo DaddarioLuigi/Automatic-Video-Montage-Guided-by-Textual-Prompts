@@ -8,10 +8,10 @@ This module provides advanced NLP parsing capabilities including:
 - Semantic role extraction
 """
 
-import spacy
-from typing import List, Dict, Set, Tuple, Optional
-from collections import defaultdict
 import warnings
+from typing import Dict, List
+
+import spacy
 
 # Suppress spaCy warnings
 warnings.filterwarnings('ignore', category=UserWarning)
