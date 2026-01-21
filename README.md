@@ -554,12 +554,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
-
-- **BLIP**: Li et al., "BLIP: Bootstrapping Language-Image Pre-training", CVPR 2022
-- **CLIP**: Radford et al., "Learning Transferable Visual Models From Natural Language Supervision", ICML 2021
-- **spaCy**: Industrial-strength Natural Language Processing
-- **Sentence Transformers**: Reimers & Gurevych, "Sentence-BERT", EMNLP 2019
-- **BART**: Lewis et al., "BART: Denoising Sequence-to-Sequence Pre-training", arXiv 2019
-
 </details>
